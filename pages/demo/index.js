@@ -22,7 +22,12 @@ Page({
         var wx_poster = this.selectComponent('#wx_poster')
         wx_poster.inits(function (){ // 初始化完成
             console.log('初始化完成')
-            wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo3.gif',(img) => {
+            wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo3.gif',{
+                width: '',
+                height: '',
+                y: '0',
+                x: 0,
+            },(img) => {
                 console.log(img)
             })
         })
