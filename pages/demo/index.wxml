@@ -1,0 +1,2 @@
+<!--pages/demo/index.wxml-->
+<wx_poster id="wx_poster" bind:wxPosterInit="wxPosterInit"></wx_poster>

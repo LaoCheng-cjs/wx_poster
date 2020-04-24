@@ -19,14 +19,29 @@ Page({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function () {
+        var wx_poster = this.selectComponent('#wx_poster')
+        wx_poster.inits(function (){ // 初始化完成
+            console.log('初始化完成')
+            wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo3.gif',(img) => {
+                console.log(img)
+            })
+        })
+        // wx_poster.setWH({
+        //     width: 605,
+        //     height: 1080
+        // },function (status) {
+        //     console.log(status)
+        // })
+        // wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo3.gif',() => {
 
+        // })
     },
 
     /**
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
-
+        
     },
 
     /**
@@ -62,5 +77,9 @@ Page({
      */
     onShareAppMessage: function () {
 
+    },
+    wxPosterInit() {
+        console.log(1111111);
+        
     }
 })

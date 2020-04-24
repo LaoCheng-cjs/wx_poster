@@ -1,0 +1,4 @@
+<!--components/wx_poster.wxml-->
+{{height}}
+{{width}}
+<canvas  id="poster_canvas" type="2d" style="height: {{height}}px;width: {{width}}px"></canvas>
