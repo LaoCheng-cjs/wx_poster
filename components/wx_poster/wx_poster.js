@@ -68,20 +68,20 @@ Component({
             isSetWH = true
         },
         // 添加图片
-        addImg(arrOrPath, options) {
+        addImg(path, options) {
             var that = this;
-            if(!arrOrPath) {
-                console.error('[wx_poster] error 参数错误：',arrOrPath )
+            if(!path) {
+                console.error('[wx_poster] error 参数错误：',path )
                 return;
             }
             var options = options || {}
-            if(Array.isArray(arrOrPath)) { // 是数组的话，
-
-            }else if(typeof arrOrPath === 'string' ){ // 链接
+            if(typeof path === 'string' ){ // 链接
                // 添加阵列内 loadArrImg
                var index = that.data.allArrImg.length
                var allArrImg = that.data.allArrImg
-               allArrImg.push(loadArrImg(canvas,arrOrPath,index))
+               options.___index = index
+               options.url = path
+               allArrImg.push(loadArrImg(canvas,options,index))
                that.setData({
                 allArrImg
                },function () {
@@ -113,9 +113,11 @@ Component({
                 // 加载完成
                 if(img) {
                     var arrImg = that.data.arrImg;
+                    var index = img.options.___index
                     arrImg[index] = {
                         index: index,
-                        myImg: img
+                        myImg: img,
+                        options: img.options
                     }
                     that.setData({
                         arrImg,
@@ -128,7 +130,9 @@ Component({
                         imgLoadErr: true
                     },function () {
                         // 通知给开发者。
-                        that.triggerEvent('img_err', index)
+                        that.triggerEvent('img_err', {
+                            index
+                        })
                         that.setData({
                             countsAll
                         },function () {
@@ -140,8 +144,18 @@ Component({
         }
     }
 })
-// 阵列排序（当图片渲染完成后，进行排列下图片）
-
+// 阵列排序，加载完成后，有些图片加载失败了，但是索引不对啊，得重新在弄下
+function recombination (arr) {
+    // 重新组装下
+    var len = arr.length,
+            result = []
+    for(var i=0;i<len;i++) {
+        if(arr[i]) {
+            result.push(arr[i])
+        }
+    }
+    return result
+}
 
 // 检查下是否全部都执行完成了。如果执行完成，就给 draw 进行回调下
 function checkAllLengthCount (that) {
@@ -151,22 +165,30 @@ function checkAllLengthCount (that) {
         if(that.data.isDraw & isCheck) {
             console.log('检测')
             isCheck = false
-            var arrImgs = that.data.arrImg,
+            var arrImgs = recombination(that.data.arrImg),
                    len = arrImgs.length,
                    i = 0;
                    drawLoad(arrImgs)
             function drawLoad (arrImg) {
                 var item = arrImg[i].myImg
+                let w = item.options.width || item.width
+                let h = item.options.height || item.height
+                let y =  item.options.y
+                let x =  item.options.x
                 if(!isSetWH) {
                     that.data.canvas.width = item.width;
                     that.data.canvas.height = item.height;
                     isSetWH = true
                     that.setData({
-                        width: item.width,
-                        height: item.height
+                        width: w,
+                        height: h
                     })
                     drawing(that.data.ctx,[{
-                        __imgObj: item
+                        __imgObj: item,
+                        w,
+                        h,
+                        x,
+                        y
                       }],function () {
                         i++
                         if(i !=len) {
@@ -177,7 +199,11 @@ function checkAllLengthCount (that) {
                       })
                 }else {
                     drawing(that.data.ctx,[{
-                        __imgObj: item
+                        __imgObj: item,
+                        w,
+                        h,
+                        x,
+                        y
                     }], function () {
                         i++
                         console.log(i)
@@ -196,9 +222,9 @@ function checkAllLengthCount (that) {
 
 
 // 阵列方法
-function loadArrImg (canvas,arrOrPath, index) {
+function loadArrImg (canvas,objOrPath, index) {
     return function (cb) {
-        loadImg(canvas,arrOrPath, function (img) {
+        loadImg(canvas,objOrPath, function (img) {
             // 判断当前的  isSetWH 是true（设置过宽度高度吗）
             cb(img)
         })
@@ -217,9 +243,7 @@ function  drawing(ctx,arr, cb) {
     ctx.drawImage(img, x, y, w || img.width, h || img.height)
     }
     if (cb && typeof cb === 'function') {
-    setTimeout(() => {
         cb(true)
-    },100)
     }
 }
 
@@ -231,17 +255,18 @@ function loadImg(canvas, ObjOrUrl,cb) {
         return
     }else if(ObjOrUrl.url) {
         var url = ObjOrUrl.url;
-    var index = ObjOrUrl.___index
-    }else {
+        var index = ObjOrUrl.___index
+    }else if(typeof ObjOrUrl === 'string') {
         var url = ObjOrUrl;
         var index = 0
     }
     if (canvas && url) {
       const img = canvas.createImage()
+      img.options = JSON.parse(JSON.stringify(ObjOrUrl))
       img.onload = () => {
         if (cb && typeof cb === 'function') {
           // ctx.drawImage(img, x, y, w || img.width, h || img.height)
-          cb(img, index)
+          cb(img)
         }
       }
       img.onerror = () => {

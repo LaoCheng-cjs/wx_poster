@@ -23,28 +23,16 @@ Page({
         wx_poster.inits(function (){ // 初始化完成
             console.log('初始化完成')
             wx_poster.addImg('https://image11.m1905.cn/uploadfile/2020/0426/20200426085242829107.jpg')
-            wx_poster.addImg('https://www.baidu.com/img/baidu_jgyloo3.gif',{
-                width: '',
-                height: '',
-                y: '0',
-                x: 0,
-            },(img) => {
-                console.log(img)
+            wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo2.gif',{
+                width: 120,
+                height: 220,
+                y: '44',
+                x: 44,
             })
-           
             wx_poster.draw(function () {
                 console.log('全部加载完成')
             })
         })
-        // wx_poster.setWH({
-        //     width: 605,
-        //     height: 1080
-        // },function (status) {
-        //     console.log(status)
-        // })
-        // wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo3.gif',() => {
-
-        // })
     },
 
     /**
@@ -88,7 +76,7 @@ Page({
     onShareAppMessage: function () {
 
     },
-    img_err(index) {
-        console.log('第几张：'+index);
+    img_err(msg) {
+        console.log(msg.detail); // 获取第几张错误。
     }
 })
