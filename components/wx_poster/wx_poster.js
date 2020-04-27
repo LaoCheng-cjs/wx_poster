@@ -1,5 +1,8 @@
 // components/wx_poster.js
-var canvas = null
+var canvas = null,
+        drawCb = () =>{},
+        isSetWH = false, // 是否设置过宽度和高度
+        isCheck  = true
 Component({
     /**
      * 组件的属性列表
@@ -15,12 +18,16 @@ Component({
      * 组件的初始数据
      */
     data: {
-        width: 0,
-        height: 0,
-        imgUrl: '',
-        ctx: null,
-        canvas: null,
-        isSetWH: false
+        width: 0, // 画布宽度
+        height: 0, // 画布高度
+        imgUrl: '', // 合成后，图片微信临时地址
+        ctx: null, // 生成二维
+        canvas: null, // 画布
+        countsAll: 0, // 加载过的数量（不管是失败还是成功了）
+        arrImg: [], // 存放已经加载完成图片
+        allArrImg: [], // 存放所有的阵列，需要执行的
+        imgLoadErr: false, // 加载失败了
+        isDraw: false
     },
     /**
      * 组件的方法列表
@@ -58,45 +65,145 @@ Component({
             }
             this.data.canvas.width = width;
             this.data.canvas.height = height;
-            this.setData({
-                isSetWH: true
-            })
+            isSetWH = true
         },
         // 添加图片
-        addImg(arrOrPath) {
+        addImg(arrOrPath, options) {
             var that = this;
             if(!arrOrPath) {
                 console.error('[wx_poster] error 参数错误：',arrOrPath )
                 return;
             }
+            var options = options || {}
             if(Array.isArray(arrOrPath)) { // 是数组的话，
 
             }else if(typeof arrOrPath === 'string' ){ // 链接
-                loadImg(canvas,arrOrPath, function (img) {
-                    // 判断当前的  isSetWH 是true（设置过宽度高度吗）
-                    if(!that.data.isSetWH) {
-                        that.data.canvas.width = img.width;
-                        that.data.canvas.height = img.height;
-                        that.setData({
-                            isSetWH: true,
-                            width: img.width,
-                            height: img.height
-                        },function () {
-                            drawing(that.data.ctx,[{
-                                __imgObj: img
-                              }])
-                        })
-                    }else {
-                        drawing(that.data.ctx,[{
-                        __imgObj: img
-                        }])
-                    }
-                })
+               // 添加阵列内 loadArrImg
+               var index = that.data.allArrImg.length
+               var allArrImg = that.data.allArrImg
+               allArrImg.push(loadArrImg(canvas,arrOrPath,index))
+               that.setData({
+                allArrImg
+               },function () {
+                   // 进行通知调用方法
+                    that.run(index)
+               })
             }
         },
-        // 
+        // 绘制方法
+        draw(cb) {
+            // 如果某个或者多个图片还没有加载完成的话。就得做等待
+            // if(countsAll) {
+            //     // countsAll
+            // }
+            this.setData({
+                isDraw: true
+            })
+            if(cb && typeof cb=== 'function') {
+                drawCb = cb
+                checkAllLengthCount(this) // 如果网络非常的好，一下子都加载好了这个方法，正好赶上了
+            }
+        },
+        // 加载阵列中图片
+        run (index) {
+            var that = this;
+            // 得先做个加载状态
+            that.data.allArrImg[index](function (img) {
+                var countsAll = ++that.data.countsAll
+                // 加载完成
+                if(img) {
+                    var arrImg = that.data.arrImg;
+                    arrImg[index] = {
+                        index: index,
+                        myImg: img
+                    }
+                    that.setData({
+                        arrImg,
+                        countsAll
+                    },function () {
+                        checkAllLengthCount(that)
+                    })
+                }else {
+                    that.setData({
+                        imgLoadErr: true
+                    },function () {
+                        // 通知给开发者。
+                        that.triggerEvent('img_err', index)
+                        that.setData({
+                            countsAll
+                        },function () {
+                            checkAllLengthCount(that)
+                        })
+                    })
+                }
+            })
+        }
     }
 })
+// 阵列排序（当图片渲染完成后，进行排列下图片）
+
+
+// 检查下是否全部都执行完成了。如果执行完成，就给 draw 进行回调下
+function checkAllLengthCount (that) {
+    // debugger
+    if(that.data.countsAll === that.data.allArrImg.length) {
+        // 判断当前开发者调过 draw
+        if(that.data.isDraw & isCheck) {
+            console.log('检测')
+            isCheck = false
+            var arrImgs = that.data.arrImg,
+                   len = arrImgs.length,
+                   i = 0;
+                   drawLoad(arrImgs)
+            function drawLoad (arrImg) {
+                var item = arrImg[i].myImg
+                if(!isSetWH) {
+                    that.data.canvas.width = item.width;
+                    that.data.canvas.height = item.height;
+                    isSetWH = true
+                    that.setData({
+                        width: item.width,
+                        height: item.height
+                    })
+                    drawing(that.data.ctx,[{
+                        __imgObj: item
+                      }],function () {
+                        i++
+                        if(i !=len) {
+                            drawLoad(arrImg)
+                        }else {
+                            drawCb()
+                        }
+                      })
+                }else {
+                    drawing(that.data.ctx,[{
+                        __imgObj: item
+                    }], function () {
+                        i++
+                        console.log(i)
+                        if(i !=len) {
+                            drawLoad(arrImg)
+                        }else {
+                            drawCb()
+                        }
+                    })
+                }
+            }
+        }
+        
+    }
+}
+
+
+// 阵列方法
+function loadArrImg (canvas,arrOrPath, index) {
+    return function (cb) {
+        loadImg(canvas,arrOrPath, function (img) {
+            // 判断当前的  isSetWH 是true（设置过宽度高度吗）
+            cb(img)
+        })
+    }
+}
 
 // 绘制的方法
 function  drawing(ctx,arr, cb) {
