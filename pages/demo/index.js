@@ -29,8 +29,13 @@ Page({
                 y: '44',
                 x: 44,
             })
+            wx_poster.setFont('标题：稍等哈所说的还是',{
+                color: '#fff'
+            })
             wx_poster.draw(function () {
                 console.log('全部加载完成')
+                // 单独绘制小程序码
+                wx_poster.wxCode('https://qa-pintuan.tope365.com/uploads/qrcode/shop/20200428/1588052139_twe0ok.png')
             })
         })
     },

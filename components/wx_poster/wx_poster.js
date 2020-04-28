@@ -27,7 +27,8 @@ Component({
         arrImg: [], // 存放已经加载完成图片
         allArrImg: [], // 存放所有的阵列，需要执行的
         imgLoadErr: false, // 加载失败了
-        isDraw: false
+        isDraw: false,
+        txtAll: []
     },
     /**
      * 组件的方法列表
@@ -141,6 +142,69 @@ Component({
                     })
                 }
             })
+        },
+        // 添加文本
+        setFont(txt, options) {
+            if(!txt && typeof txt != 'string') {
+                console.error('[setFont] error 添加文本错误'+ text)
+                return;
+            }
+            let option = options || {}
+            let optionsInit = {
+                size: 23,
+                color: '#000000',
+                y: 10,
+                x: 0
+            }
+            for(let str in optionsInit) {
+                optionsInit[str] = option[str] ? option[str] : optionsInit[str];
+            }
+            var txtAll = this.data.txtAll
+            // 添加到文本内
+            txtAll.push({
+                txt,
+                option: optionsInit
+            })
+            this.setData({
+                txtAll
+            })
+        },
+        // 绘制微信小程序码
+        wxCode(url, option) {
+            if(!url && typeof url != 'string') {
+                return;
+            }else {
+                let option = option || {}
+                let optionInit = {
+                    width: 280,
+                    height: 280,
+                    y: 150,
+                    x: 150,
+                    deviation: 20
+                }
+                for(let str in optionInit) {
+                    optionInit[str] = option[str] ? option[str] : optionInit[str]
+                }
+                // 加载微信小程序码地址
+                optionInit.___index = 0
+                optionInit.url = url
+                let ctx = this.data.ctx
+                loadImg(canvas,optionInit, function (img) {
+                    console.log(img)
+                    ctx.arc(optionInit.x + optionInit.deviation, optionInit.y + optionInit.deviation, optionInit.width/2 + optionInit.deviation, 0, 2 * Math.PI)
+                    // console.log(ctx);
+                    ctx.fillStyle = '#ffffff'
+                    // ctx.setFillStyle('#EEEEEE')
+                    ctx.fill()
+                    drawing(ctx,[{
+                        __imgObj: img,
+                        w: optionInit.width,
+                        h: optionInit.height,
+                        x: optionInit.x - optionInit.width / 2 + optionInit.deviation,
+                        y: optionInit.y - optionInit.height / 2 + optionInit.deviation
+                      }])
+                })
+            }
         }
     }
 })
@@ -194,7 +258,7 @@ function checkAllLengthCount (that) {
                         if(i !=len) {
                             drawLoad(arrImg)
                         }else {
-                            drawCb()
+                            drawTxt(that)
                         }
                       })
                 }else {
@@ -210,16 +274,33 @@ function checkAllLengthCount (that) {
                         if(i !=len) {
                             drawLoad(arrImg)
                         }else {
-                            drawCb()
+                            drawTxt(that)
                         }
                     })
                 }
             }
         }
-        
     }
 }
 
+// 绘制文本
+function drawTxt(that) {
+    var txtAll = that.data.txtAll
+    var len = txtAll.length
+    if(len === 0) {
+        drawCb()
+    }else {
+        var ctx = that.data.ctx
+        for(var i=0;i<len;i++) {
+            var option = txtAll[i].option
+            ctx.font =  option.size + " sans-serif"
+            // ctx.fillText((nickname.length > 6 ? nickname.slice(0, 6) + '...' : nickname) + '邀你' + (app.storeData.userinfo.user_type == 2 ? '开团' : '参团'), 141 / ratio, 946 / ratio)
+            ctx.fillStyle = option.color
+            ctx.fillText(txtAll[i].txt , option.x , option.y)
+        }
+        drawCb()
+    }
+}
 
 // 阵列方法
 function loadArrImg (canvas,objOrPath, index) {
