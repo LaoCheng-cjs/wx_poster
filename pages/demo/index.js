@@ -22,10 +22,10 @@ Page({
         var wx_poster = this.selectComponent('#wx_poster')
         wx_poster.inits(function (){ // 初始化完成
             console.log('初始化完成')
-            wx_poster.setWH({
-                width: 120,
-                height: 444
-            })
+            // wx_poster.setWH({
+            //     width: 120,
+            //     height: 444
+            // })
             wx_poster.addImg('https://image11.m1905.cn/uploadfile/2020/0426/20200426085242829107.jpg')
             wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo2.gif',{
                 width: 120,

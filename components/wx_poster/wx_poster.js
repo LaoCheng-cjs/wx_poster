@@ -185,7 +185,8 @@ Component({
                     height: 280,
                     y: 150,
                     x: 150,
-                    deviation: 20
+                    deviation: 20,
+                    bgColor: '#fff'
                 }
                 for(let str in optionInit) {
                     optionInit[str] = option[str] ? option[str] : optionInit[str]
@@ -198,7 +199,7 @@ Component({
                     console.log(img)
                     ctx.arc(optionInit.x + optionInit.deviation, optionInit.y + optionInit.deviation, optionInit.width/2 + optionInit.deviation, 0, 2 * Math.PI)
                     // console.log(ctx);
-                    ctx.fillStyle = '#ffffff'
+                    ctx.fillStyle = optionInit.bgColor
                     // ctx.setFillStyle('#EEEEEE')
                     ctx.fill()
                     drawing(ctx,[{
