@@ -54,6 +54,7 @@ Component({
         },
         // 设置海报大小。如果知道开发者优先设置海报宽度和高度的话，是可以
         setWH({ width = 0, height = 0}, cb) {
+            // debugger
             console.log(this.data.canvas)
             var canvas = this.data.canvas
             if(typeof cb === 'function') {
@@ -64,9 +65,13 @@ Component({
             if(!canvas) {
                 return;
             }
-            this.data.canvas.width = width;
-            this.data.canvas.height = height;
+            canvas.width = width;
+            canvas.height = height;
             isSetWH = true
+            this.setData({
+                width,
+                height
+            })
         },
         // 添加图片
         addImg(path, options) {
@@ -170,11 +175,11 @@ Component({
             })
         },
         // 绘制微信小程序码
-        wxCode(url, option) {
+        wxCode(url, options) {
             if(!url && typeof url != 'string') {
                 return;
             }else {
-                let option = option || {}
+                let option = options || {}
                 let optionInit = {
                     width: 280,
                     height: 280,
@@ -205,6 +210,29 @@ Component({
                       }])
                 })
             }
+        },
+        // 导出图片
+        generatePic(cb) {
+            wx.canvasToTempFilePath({
+                canvas,
+                width: that.data.ctxWidth, // 导出的图片大小
+                height: that.data.ctxHeight,
+                quality: 1,
+                success: function (res) {
+                  var tempFilePath = res.tempFilePath
+                  isFn(cb)({
+                      status: 1,
+                      tempFilePath
+                  })
+                },
+                fail(err) {
+                    isFn(cb)({
+                        status: 0,
+                        err
+                    })
+                }
+            })
+            
         }
     }
 })

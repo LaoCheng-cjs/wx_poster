@@ -22,6 +22,10 @@ Page({
         var wx_poster = this.selectComponent('#wx_poster')
         wx_poster.inits(function (){ // 初始化完成
             console.log('初始化完成')
+            wx_poster.setWH({
+                width: 120,
+                height: 444
+            })
             wx_poster.addImg('https://image11.m1905.cn/uploadfile/2020/0426/20200426085242829107.jpg')
             wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo2.gif',{
                 width: 120,
@@ -29,13 +33,18 @@ Page({
                 y: '44',
                 x: 44,
             })
-            wx_poster.setFont('标题：稍等哈所说的还是',{
-                color: '#fff'
+            wx_poster.setFont('标题：感谢关注',{
+                // color: '#000',
+                y: 222,
+                x: 66
             })
             wx_poster.draw(function () {
-                console.log('全部加载完成')
                 // 单独绘制小程序码
-                wx_poster.wxCode('https://qa-pintuan.tope365.com/uploads/qrcode/shop/20200428/1588052139_twe0ok.png')
+                wx_poster.wxCode('https://res.wx.qq.com/wxdoc/dist/assets/img/mydev-qrcode-new.669a7d88.jpg', {
+                    width: 120,
+                    height: 120,
+                })
+                // 
             })
         })
     },

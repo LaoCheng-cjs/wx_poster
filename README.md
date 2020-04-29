@@ -28,7 +28,7 @@
 
 ### 第一步：下载或者克隆
 
-> （下载方式，不懂自行百度），下载好后，找到 components 目录中 wx_poster 文件夹，进行拷贝放入到自己项目中。比如我放入在 components 文件夹下面。
+> （下载方式，不懂自行百度），下载好后，在项目中找到 components 目录中 wx_poster 文件夹，进行拷贝放入到自己项目中。比如我放入在 components 文件夹下面。
 
 ### 第二步：引入组件
 
@@ -70,19 +70,41 @@ Page({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function () {
+        // 1、获取到页面中的dom对象
         var wx_poster = this.selectComponent('#wx_poster')
-        wx_poster.inits(function (){ // 初始化完成
+        // 2、调用inits 初始化
+        wx_poster.inits(function (){ 
             console.log('初始化完成')
-            wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo3.gif',(img) => {
-                console.log(img)
-            })
         })
     },
-
-    /**
-     * 生命周期函数--监听页面显示
-     */
+    // ....代码块
 })
 ```
+
+### setWH方法：设置海报大小[可选]
+
+> 设置海报大小（宽度和高度），是可选项。就是如果你不知道海报大小是多少，希望后台运营同事上传图片大小来决定话，可以不用设置这个，默认第一张图为海报背景图。
+
+```js
+// ... 省略前面的代码
+wx_poster.inits(function (){ // 1、必须初始化完成后，才能设置宽度和图片及文字。
+    console.log('初始化完成')
+    // 2、设置海报宽度和高度
+     wx_poster.setWH({
+        width: 120,
+        height: 444
+    })
+    // 3、后面才是添加图片及文字.........
+})
+```
+
+### addImg方法：添加图片
+
+> 如果不设置海报大小，默认取第一张图片大小。
+
+```js
+
+```
+
 
 
