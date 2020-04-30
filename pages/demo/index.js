@@ -43,7 +43,9 @@ Page({
                 wx_poster.wxCode('https://res.wx.qq.com/wxdoc/dist/assets/img/mydev-qrcode-new.669a7d88.jpg', {
                     width: 120,
                     height: 120,
+                    
                 })
+
                 // 
             })
         })

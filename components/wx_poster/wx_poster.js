@@ -183,8 +183,8 @@ Component({
                 let optionInit = {
                     width: 280,
                     height: 280,
-                    y: 150,
-                    x: 150,
+                    y: 0,
+                    x: 0,
                     deviation: 20,
                     bgColor: '#fff'
                 }
@@ -197,7 +197,11 @@ Component({
                 let ctx = this.data.ctx
                 loadImg(canvas,optionInit, function (img) {
                     console.log(img)
-                    ctx.arc(optionInit.x + optionInit.deviation, optionInit.y + optionInit.deviation, optionInit.width/2 + optionInit.deviation, 0, 2 * Math.PI)
+                    // 计算半圆位置x与y的公式：传递过来位置 + width / 2 + deviation
+                    let width = optionInit.width / 2
+                    let x = optionInit.x + width + optionInit.deviation
+                    let y = optionInit.y + width+ optionInit.deviation
+                    ctx.arc(x, y , width + optionInit.deviation, 0, 2 * Math.PI)
                     // console.log(ctx);
                     ctx.fillStyle = optionInit.bgColor
                     // ctx.setFillStyle('#EEEEEE')
@@ -206,19 +210,20 @@ Component({
                         __imgObj: img,
                         w: optionInit.width,
                         h: optionInit.height,
-                        x: optionInit.x - optionInit.width / 2 + optionInit.deviation,
-                        y: optionInit.y - optionInit.height / 2 + optionInit.deviation
+                        x: optionInit.x + optionInit.deviation,
+                        y: optionInit.y + optionInit.deviation
                       }])
                 })
             }
         },
         // 导出图片
-        generatePic(cb) {
+        generatePic(cb, qualityNum) {
+            let quality = qualityNum || 1
             wx.canvasToTempFilePath({
                 canvas,
                 width: that.data.ctxWidth, // 导出的图片大小
                 height: that.data.ctxHeight,
-                quality: 1,
+                quality,
                 success: function (res) {
                   var tempFilePath = res.tempFilePath
                   isFn(cb)({

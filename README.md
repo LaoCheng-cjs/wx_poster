@@ -2,12 +2,11 @@
 - 目前开发中
 - 目前开发中
 - 目前开发中
-- 目前开发中
 
 
 # wx_poster
 
-> 用于海报生成，希望能帮助那些不经常开发小程序开发者。
+> 用于海报生成，希望能帮助那些不经常开发小程序开发者。用完，觉得好用点赞，辛苦制作。
 
 
 ## 问答
@@ -30,7 +29,42 @@
 
 **如果没有设置海报的宽度和高度。默认取第一张图片（就是第一个addImag()方法拿到的图片）宽度和高度**
 
-> 
+> 这个怕是用于后台上传后的，海报不知道是多大的，有可能小点，你没在现场不知道用户是怎么操作的。后期新增缩放率，大家都知道微信的缩放值不准确，哎。可怜的娃啊。
+
+**图片加载错误处理？**
+
+> 如果图片加载错误，我们会使用 img_err 这个事件来通知，返回第几个 addImg 加载错误了。
+
+```html
+<wx_poster id="wx_poster" bind:img_err="img_err"></wx_poster>
+```
+
+```js
+// 在页面js中添加接受的方法。
+Page({
+
+    /**
+     * 页面的初始数据
+     */
+    data: {
+
+    },
+    // ....代码块省略
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+    },
+    // 1、加载错误事件
+    img_err(msg) {
+        console.log(msg.detail); // 获取第几个 addImg加载错误了。
+    }
+})
+```
+
+**如果第一张图片加载错误，并且我还没设置大小怎么处理的**
+
+> 如果第一个 addImg 图片加载失败的话，并且未设置图片宽度高度，进行 img_err 事件以外，以第二个图片加载完成的作为海报的宽度和高度，以此类推。
 
 ## 使用步骤：
 
@@ -97,14 +131,14 @@ Page({
 
 方法或者属性 | 说明
 ---|---
-inits(function) | 初始化成功后，才能进行往下走。
+inits(function) | 在页面的onReady生命周期中进行调用，初始化成功后，才能进行往下走。在回调内才能
 showPoster | 属性，默认false，进行隐藏canvas。true显示，一般用于调试
 setWH({width: 0,height: 0},[function]) | 设置海报大小。默认你第一张图高度和宽度作为海报宽高。第二个参数可选，返回状态，设置成功(status: 1)还是失败(status: 0)。
 addImg(url, [options]) | 方法，进行添加某个图片。可以是数组或者是图片地址。返回值是添加得所有图片
 draw | 返回第一个参数回调当前得绘制完成得。第二个参数
-setFont(text,{size: 22,color: '#000', y: 0, x: 0}) | 设置文本。默认值 {size: 22,color: '#000', y: 0, x: 0}
-wxCode('url',[{width: '',height: '',y: 0, x: 0,deviation: 20,bgColor: '#fff'}]) | 需要后台将小程序码图片弄成透明的背景。使用这个必须在 draw 方法调用成功后回调中使用。
-generatePic(function (object) {}) | 生成图片，返回对象，生成失败status为0，返回err信息。生成成功 status为1，返回tempFilePath
+setFont(text,[{size: 22,color: '#000', y: 0, x: 0}]) | 参数一：设置文本。参数二：可选，默认值 {size: 22,color: '#000', y: 0, x: 0}
+wxCode('url',[{width: 280,height: 280,y: 0, x: 0,deviation: 20,bgColor: '#fff'}]) | 需要后台将小程序码图片弄成透明的背景。使用这个必须在 draw 方法调用成功后回调中使用。参数一：图片的地址（本地地址也可以）。参数二：可选项，默认的值。
+generatePic(function (object) {}, [quality]) | 生成图片，第一个参数为函数，回调返回对象，生成失败status为0，返回err信息。生成成功 status为1，返回tempFilePath。第二个参数是可选项，生成图片质量，默认最好的（值为1）
 
 ### ~~设置调试模式~~
 
@@ -197,11 +231,14 @@ wx_poster.inits(function (){
 
 ### wxCode方法：合并小程序码
 
-> 为什么会单独拿出来了，是因为官方的小程序码没有背景是白色的，或者自定义颜色。注意的地方：
+> 为什么会单独拿出来了，是因为官方的小程序码没有背景是白色的，或者自定义颜色。那么此处需要和后台一起开发，后台将背景透明加上。注意的地方：
 
 - 必须在draw有回调了，才能合并小程序码
 - 小程序码的宽度和高度默认是 280
-- 目前x轴与y轴有些问题，得需要自己定下
+- 设置y和x轴，默认都是0
+- 设置小程序码背景颜色，bgColor: '#fff'
+- 图片需要是背景是透明的。
+- 小程序码与背景颜色扩张（deviation）距离，默认20
 
 ```js
 wx_poster.inits(function (){ 
@@ -220,8 +257,11 @@ wx_poster.inits(function (){
         // 2、小程序码，第二个参数是可选项
         // wx_poster.wxCode('https://res.wx.qq.com/wxdoc/dist/assets/img/mydev-qrcode-new.669a7d88.jpg')
          wx_poster.wxCode('https://res.wx.qq.com/wxdoc/dist/assets/img/mydev-qrcode-new.669a7d88.jpg', {
-            width: 120,
-            height: 120,
+            width: 280, // 默认值
+            height: 280, // 默认值
+            y: 0, // 默认值
+            x: 0, // 默认值
+            deviation: 20 // 默认值
         })
     })
 })
@@ -229,7 +269,7 @@ wx_poster.inits(function (){
 
 ### generatePic 方法，生成图片地址
 
-> 能生成图片地址，可用于展示或者用于导出
+> 能生成图片地址，可用于展示或者用于导出。第一个参数为返回合成状态与连接。第二个参数为[可选项]合成图片质量，默认为1，从 0.1 - 1值。
 
 ```js
 wx_poster.inits(function (){ 
