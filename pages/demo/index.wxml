@@ -1,2 +1,10 @@
 <!--pages/demo/index.wxml-->
-<wx_poster id="wx_poster" bind:img_err="img_err"></wx_poster>
+
+<view>
+    <view class="tab">
+        <view class="tab-list {{index == active?'actions':''}}" wx:for="{{tab}}" bindtap="tabBtn" data-id="{{index}}">{{item.name}}</view>
+    </view>
+    <!-- 合成得 -->
+    <image style="width: {{width}}rpx;height: {{height}}rpx" src="{{imgSrc}}"></image>
+</view>
+<wx_poster id="wx_poster" bind:img_err="img_err" showPoster="{{true}}"></wx_poster>

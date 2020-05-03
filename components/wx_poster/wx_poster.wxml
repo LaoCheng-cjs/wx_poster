@@ -1,2 +1,2 @@
 <!--components/wx_poster.wxml-->
-<canvas  id="poster_canvas" type="2d" style="height: {{height}}px;width: {{width}}px"></canvas>
+<canvas  id="poster_canvas" type="2d" style="height: {{height}}px;width: {{width}}px" class="{{showPoster ? 'showPoster' : ''}}"></canvas>

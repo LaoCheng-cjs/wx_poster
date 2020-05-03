@@ -5,7 +5,15 @@ Page({
      * 页面的初始数据
      */
     data: {
-
+        imgSrc: '',
+        tab: [{
+            name: '夏天'
+        },{
+            name: '高考'
+        }],
+        active: 0,
+        width: '0',
+        height: '0'
     },
 
     /**
@@ -19,79 +27,75 @@ Page({
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function () {
+        this.cunItemload()
+    },
+    // 选项卡点击
+    tabBtn(e) {
+        var id = e.currentTarget.dataset.id
+        this.setData({
+            active: id
+        },function () {
+            if(id == 1) { // 高考
+                
+            }
+        })
+    },
+    // 春天
+    cunItemload () {
+        var that = this
+        wx.showLoading({
+        })
         var wx_poster = this.selectComponent('#wx_poster')
         wx_poster.inits(function (){ // 初始化完成
             console.log('初始化完成')
-            // wx_poster.setWH({
-            //     width: 120,
-            //     height: 444
-            // })
-            wx_poster.addImg('https://image11.m1905.cn/uploadfile/2020/0426/20200426085242829107.jpg')
-            wx_poster.addImg('https://www.baidu.com/img/baidu_jgylogo2.gif',{
-                width: 120,
-                height: 220,
-                y: '44',
-                x: 44,
+            wx_poster.addImg('../../img/xiatian.png', {
+                success(msg) {
+                    console.log(msg)
+                    that.setData({
+                        width: msg.w,
+                        height: msg.h
+                    })
+                }
             })
-            wx_poster.setFont('标题：感谢关注',{
-                // color: '#000',
-                y: 222,
-                x: 66
+            wx_poster.setFont('wx_poster描述一段文本了，哈哈哈哈',{
+                color: '#333',
+                y: 1310,
+                x: 136,
+                size: 24,
             })
+            // https://ww1.sinaimg.cn/bmiddle/005MGTLwgy1g8ge5p1or4j30u016k4qp.jpg
             wx_poster.draw(function () {
                 // 单独绘制小程序码
-                wx_poster.wxCode('https://res.wx.qq.com/wxdoc/dist/assets/img/mydev-qrcode-new.669a7d88.jpg', {
-                    width: 120,
-                    height: 120,
-                    
+                wx_poster.wxCode('../../img/wx_img.png', {
+                    y: 920,
+                    x: 133,
+                    width: 180,
+                    height: 180,
+                    success() {
+                        wx_poster.generatePic(function (obj) {
+                            if(obj.status) { // 导出成功
+                                console.log('导出成功')
+                                console.log(obj)
+                                that.setData({
+                                    imgSrc: obj.tempFilePath
+                                } ,function () {
+                                    wx.hideLoading({
+                                      complete: (res) => {},
+                                    })
+                                })
+                            }else {
+                                // 导出失败
+                                consle.log('导出失败')
+                            }
+                        }, 1)
+                    }
                 })
-
-                // 
+                
             })
         })
     },
+    // 高考
 
-    /**
-     * 生命周期函数--监听页面显示
-     */
-    onShow: function () {
-        
-    },
-
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
-    onHide: function () {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload: function () {
-
-    },
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh: function () {
-
-    },
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom: function () {
-
-    },
-
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage: function () {
-
-    },
     img_err(msg) {
         console.log(msg.detail); // 获取第几张错误。
     }

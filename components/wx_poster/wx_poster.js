@@ -1,8 +1,15 @@
-// components/wx_poster.js
+/*
+   @page components/wx_poster.js 
+    @author laocheng
+    @version 0.1
+    (c) 2019 laocheng
+    Released under the MIT License.
+*/
 var canvas = null,
         drawCb = () =>{},
         isSetWH = false, // 是否设置过宽度和高度
-        isCheck  = true
+        isCheck  = true,
+        generateImg = () => {} // 导出图片方法
 Component({
     /**
      * 组件的属性列表
@@ -87,6 +94,8 @@ Component({
                var allArrImg = that.data.allArrImg
                options.___index = index
                options.url = path
+               options.x = options.x || 0
+               options.y = options.y  || 0
                allArrImg.push(loadArrImg(canvas,options,index))
                that.setData({
                 allArrImg
@@ -186,7 +195,10 @@ Component({
                     y: 0,
                     x: 0,
                     deviation: 20,
-                    bgColor: '#fff'
+                    bgColor: '#fff',
+                    success: () => {
+
+                    }
                 }
                 for(let str in optionInit) {
                     optionInit[str] = option[str] ? option[str] : optionInit[str]
@@ -212,13 +224,17 @@ Component({
                         h: optionInit.height,
                         x: optionInit.x + optionInit.deviation,
                         y: optionInit.y + optionInit.deviation
-                      }])
+                      }],function () {
+                          optionInit.success()
+                      })
                 })
             }
         },
         // 导出图片
         generatePic(cb, qualityNum) {
+            let that = this;
             let quality = qualityNum || 1
+            // 必须等待前面的图片全部绘制完成后，才能导出。
             wx.canvasToTempFilePath({
                 canvas,
                 width: that.data.ctxWidth, // 导出的图片大小
@@ -238,7 +254,6 @@ Component({
                     })
                 }
             })
-            
         }
     }
 })
@@ -289,6 +304,12 @@ function checkAllLengthCount (that) {
                         y
                       }],function () {
                         i++
+                        item.success({
+                            w,
+                            h,
+                            x,
+                            y
+                        })
                         if(i !=len) {
                             drawLoad(arrImg)
                         }else {
@@ -304,6 +325,12 @@ function checkAllLengthCount (that) {
                         y
                     }], function () {
                         i++
+                        item.success({
+                            w,
+                            h,
+                            x,
+                            y
+                        })
                         console.log(i)
                         if(i !=len) {
                             drawLoad(arrImg)
@@ -327,7 +354,7 @@ function drawTxt(that) {
         var ctx = that.data.ctx
         for(var i=0;i<len;i++) {
             var option = txtAll[i].option
-            ctx.font =  option.size + " sans-serif"
+            ctx.font =  option.size + "px sans-serif"
             // ctx.fillText((nickname.length > 6 ? nickname.slice(0, 6) + '...' : nickname) + '邀你' + (app.storeData.userinfo.user_type == 2 ? '开团' : '参团'), 141 / ratio, 946 / ratio)
             ctx.fillStyle = option.color
             ctx.fillText(txtAll[i].txt , option.x , option.y)
@@ -378,6 +405,7 @@ function loadImg(canvas, ObjOrUrl,cb) {
     if (canvas && url) {
       const img = canvas.createImage()
       img.options = JSON.parse(JSON.stringify(ObjOrUrl))
+      img.success = ObjOrUrl.success || function ()  {};
       img.onload = () => {
         if (cb && typeof cb === 'function') {
           // ctx.drawImage(img, x, y, w || img.width, h || img.height)

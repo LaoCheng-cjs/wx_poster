@@ -1,4 +1,6 @@
 /* components/wx_poster.wxss */
-#poster_canvas {
-    
+.showPoster {
+  position: fixed;
+  left: -9999999999px;
+  top: 999999999px;
 }
