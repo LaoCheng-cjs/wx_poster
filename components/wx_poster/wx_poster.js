@@ -237,13 +237,23 @@ Component({
             // 必须等待前面的图片全部绘制完成后，才能导出。
             wx.canvasToTempFilePath({
                 canvas,
-                width: that.data.ctxWidth, // 导出的图片大小
-                height: that.data.ctxHeight,
+                // width: that.data.ctxWidth, // 导出的图片大小
+                // height: that.data.ctxHeight,
                 quality,
                 success: function (res) {
                   var tempFilePath = res.tempFilePath
+                  // 导出渲染的页面宽度和高度
+                  var w =  that.data.width,
+                        h =  that.data.height;
+                  if(w > 750) {
+                    var scale = 750 / w;
+                    w = 750;
+                    h = h * scale
+                  }
                   isFn(cb)({
                       status: 1,
+                      w,
+                      h,
                       tempFilePath
                   })
                 },

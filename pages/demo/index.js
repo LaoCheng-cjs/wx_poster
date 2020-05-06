@@ -36,7 +36,7 @@ Page({
             active: id
         },function () {
             if(id == 1) { // 高考
-                
+
             }
         })
     },
@@ -51,10 +51,6 @@ Page({
             wx_poster.addImg('../../img/xiatian.png', {
                 success(msg) {
                     console.log(msg)
-                    that.setData({
-                        width: msg.w,
-                        height: msg.h
-                    })
                 }
             })
             wx_poster.setFont('wx_poster描述一段文本了，哈哈哈哈',{
@@ -79,6 +75,11 @@ Page({
                                 that.setData({
                                     imgSrc: obj.tempFilePath
                                 } ,function () {
+                                    // 设置渲染宽度和高度
+                                    that.setData({
+                                        width: obj.w,
+                                        height: obj.h
+                                    })
                                     wx.hideLoading({
                                       complete: (res) => {},
                                     })
@@ -95,7 +96,7 @@ Page({
         })
     },
     // 高考
-
+    
     img_err(msg) {
         console.log(msg.detail); // 获取第几张错误。
     }
