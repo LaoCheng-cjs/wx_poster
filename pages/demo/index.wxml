@@ -7,4 +7,5 @@
     <!-- 合成得 -->
     <image style="width: {{width}}rpx;height: {{height}}rpx" src="{{imgSrc}}"></image>
 </view>
-<wx_poster id="wx_poster" bind:img_err="img_err" showPoster="{{false}}"></wx_poster>
+<button>下载</button>
+<wx_poster id="wx_poster" bind:img_err="img_err" showPoster="{{true}}"></wx_poster>

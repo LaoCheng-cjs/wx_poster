@@ -1,0 +1,2 @@
+<!--components/demo/demo.wxml-->
+<canvas  id="poster_canvas" type="2d" style="height: {{height}}px;width: {{width}}px" ></canvas>

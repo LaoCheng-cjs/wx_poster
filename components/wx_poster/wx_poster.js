@@ -299,33 +299,35 @@ function checkAllLengthCount (that) {
                 let y =  item.options.y
                 let x =  item.options.x
                 if(!isSetWH) {
-                    that.data.canvas.width = item.width;
-                    that.data.canvas.height = item.height;
+                    canvas.width = item.width;
+                    canvas.height = item.height;
                     isSetWH = true
                     that.setData({
                         width: w,
                         height: h
-                    })
-                    drawing(that.data.ctx,[{
-                        __imgObj: item,
-                        w,
-                        h,
-                        x,
-                        y
-                      }],function () {
-                        i++
-                        item.success({
+                    },function () {
+                        drawing(that.data.ctx,[{
+                            __imgObj: item,
                             w,
                             h,
                             x,
                             y
+                        }],function () {
+                            i++
+                            item.success({
+                                w,
+                                h,
+                                x,
+                                y
+                            })
+                            if(i !=len) {
+                                drawLoad(arrImg)
+                            }else {
+                                drawTxt(that)
+                            }
                         })
-                        if(i !=len) {
-                            drawLoad(arrImg)
-                        }else {
-                            drawTxt(that)
-                        }
-                      })
+                    })
+                    
                 }else {
                     drawing(that.data.ctx,[{
                         __imgObj: item,
