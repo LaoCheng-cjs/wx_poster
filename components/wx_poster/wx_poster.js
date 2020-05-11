@@ -72,12 +72,15 @@ Component({
             if(!canvas) {
                 return;
             }
-            canvas.width = width;
-            canvas.height = height;
             isSetWH = true
             this.setData({
                 width,
                 height
+            },function () {
+                setTimeout(() => {
+                    canvas.width = width;
+                    canvas.height = height;
+                },60)
             })
         },
         // 添加图片
@@ -291,7 +294,10 @@ function checkAllLengthCount (that) {
             var arrImgs = recombination(that.data.arrImg),
                    len = arrImgs.length,
                    i = 0;
-                   drawLoad(arrImgs)
+                //    解决微信bug（下面注释有回答），
+                setTimeout(() => {
+                    drawLoad(arrImgs)
+                },100)
             function drawLoad (arrImg) {
                 var item = arrImg[i].myImg
                 let w = item.options.width || item.width
@@ -299,33 +305,38 @@ function checkAllLengthCount (that) {
                 let y =  item.options.y
                 let x =  item.options.x
                 if(!isSetWH) {
-                    canvas.width = item.width;
-                    canvas.height = item.height;
+                    
                     isSetWH = true
                     that.setData({
                         width: w,
                         height: h
                     },function () {
-                        drawing(that.data.ctx,[{
-                            __imgObj: item,
-                            w,
-                            h,
-                            x,
-                            y
-                        }],function () {
-                            i++
-                            item.success({
+                        // 解决微信bug，必须先设置canvas的宽度和高度。在进行延迟点时间，设置canvas宽度和高度
+                        setTimeout(() => {
+                            canvas.width = item.width;
+                            canvas.height = item.height;
+                            drawing(that.data.ctx,[{
+                                __imgObj: item,
                                 w,
                                 h,
                                 x,
                                 y
+                            }],function () {
+                                i++
+                                item.success({
+                                    w,
+                                    h,
+                                    x,
+                                    y
+                                })
+                                if(i !=len) {
+                                    drawLoad(arrImg)
+                                }else {
+                                    drawTxt(that)
+                                }
                             })
-                            if(i !=len) {
-                                drawLoad(arrImg)
-                            }else {
-                                drawTxt(that)
-                            }
-                        })
+                        },60)
+                        
                     })
                     
                 }else {
