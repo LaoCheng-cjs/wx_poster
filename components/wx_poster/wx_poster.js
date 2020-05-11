@@ -43,8 +43,10 @@ Component({
     methods: {
         // 初始化
         inits(cb) {
-            // 如果传递过来的是 showPoster
+            //  初始化下面的 isCheck 与isSetWH 参数，必须得，原因在于：写在外面的变量是全局的，之前存在过，之后还会存在。
             let that = this;
+            isCheck = true;
+            isSetWH = false;
             const query = that.createSelectorQuery()
             query.select('#poster_canvas')
                 .fields({ node: true, size: true })
@@ -285,10 +287,9 @@ function recombination (arr) {
 
 // 检查下是否全部都执行完成了。如果执行完成，就给 draw 进行回调下
 function checkAllLengthCount (that) {
-    // debugger
     if(that.data.countsAll === that.data.allArrImg.length) {
         // 判断当前开发者调过 draw
-        if(that.data.isDraw & isCheck) {
+        if(that.data.isDraw && isCheck) {
             console.log('检测')
             isCheck = false
             var arrImgs = recombination(that.data.arrImg),
