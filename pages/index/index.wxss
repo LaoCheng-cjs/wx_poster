@@ -26,6 +26,7 @@ view,image {
     grid-template-rows: auto auto auto;
     height: 780rpx; 
     grid-gap: 10px;
+    margin: 0 22rpx;
 }
 .grid-wrap .lists {
     border: 1px solid #eee;
@@ -39,7 +40,10 @@ view,image {
     text-align: center;
 }
 
-
+.tips {
+    font-size: 30rpx;
+    padding: 22rpx;
+}
 
 
 

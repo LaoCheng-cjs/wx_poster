@@ -2,6 +2,8 @@
   "pages":[
     "pages/index/index",
     "pages/spring/index",
+    "pages/workersDay/index",
+    "pages/universityEntranceExam/index",
     "pages/logs/logs"
   ],
   "window":{

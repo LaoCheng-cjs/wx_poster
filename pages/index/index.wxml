@@ -5,10 +5,18 @@
         <view class="tab-list {{index == active?'actions':''}}" wx:for="{{tab}}" bindtap="tabBtn" data-id="{{index}}">{{item.name}}</view>
     </view> -->
     <!-- 画九宫格 -->
+    <view style="padding-bottom: 22rpx">案例如下：</view>
     <view class="grid-wrap">
         <navigator url="../spring/index" class="lists">
             <view>春天</view>
         </navigator>
+        <navigator url="../universityEntranceExam/index" class="lists">
+            <view>高考</view>
+        </navigator>
+        <navigator url="../workersDay/index" class="lists">
+            <view>劳动节</view>
+        </navigator>
     </view>
 </view>
 
+<view class="tips">注意：图片与小程序码或者二维码来源素材网络。如果有侵犯的话，请联系作者，进行删除</view>

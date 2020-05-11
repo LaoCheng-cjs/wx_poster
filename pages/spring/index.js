@@ -35,7 +35,7 @@ Page({
                 width: 750,
                 height: 1344
             })
-            wx_poster.addImg('../../img/xiatian.png', {
+            wx_poster.addImg('../../img/spring/xiatian.png', {
                 success(msg) {
                     console.log(msg)
                 }
