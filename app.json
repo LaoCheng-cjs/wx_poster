@@ -1,6 +1,7 @@
 {
   "pages":[
-    "pages/demo/index",
+    "pages/index/index",
+    "pages/spring/index",
     "pages/logs/logs"
   ],
   "window":{

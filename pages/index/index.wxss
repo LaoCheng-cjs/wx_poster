@@ -1,0 +1,49 @@
+/* pages/demo/index.wxss */
+view,image {
+    padding: 0;
+    margin: 0
+}
+.tab {
+    display: flex;
+    padding: 0 28rpx 8rpx;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    margin-bottom: 9px;
+    /* justify-content: s; */
+}
+.tab-list {
+    padding:  14rpx 22rpx;
+}
+.tab-list.actions {
+    color: #fff;
+    background-color: rgb(25, 192, 192);
+    border-radius: 7px;
+}
+
+/* 九宫格 */
+.grid-wrap {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    height: 780rpx; 
+    grid-gap: 10px;
+}
+.grid-wrap .lists {
+    border: 1px solid #eee;
+   display: inline-flex;
+   justify-items: center;
+   align-items: center;
+}
+.grid-wrap .lists view {
+    width: 100%;
+    font-size: 26rpx;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+

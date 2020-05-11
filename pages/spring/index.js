@@ -1,4 +1,4 @@
-// pages/demo/index.js
+// pages/spring/index.js
 Page({
 
     /**
@@ -6,12 +6,6 @@ Page({
      */
     data: {
         imgSrc: '',
-        tab: [{
-            name: '夏天'
-        },{
-            name: '高考'
-        }],
-        active: 0,
         width: '0',
         height: '0'
     },
@@ -28,17 +22,6 @@ Page({
      */
     onReady: function () {
         this.cunItemload()
-    },
-    // 选项卡点击
-    tabBtn(e) {
-        var id = e.currentTarget.dataset.id
-        this.setData({
-            active: id
-        },function () {
-            if(id == 1) { // 高考
-
-            }
-        })
     },
     // 春天
     cunItemload () {
@@ -66,12 +49,14 @@ Page({
             // https://ww1.sinaimg.cn/bmiddle/005MGTLwgy1g8ge5p1or4j30u016k4qp.jpg
             wx_poster.draw(function () {
                 // 单独绘制小程序码
+               
                 wx_poster.wxCode('../../img/wx_img.png', {
                     y: 920,
                     x: 133,
                     width: 180,
                     height: 180,
                     success() {
+                        console.log('设置成功')
                         wx_poster.generatePic(function (obj) {
                             if(obj.status) { // 导出成功
                                 console.log('导出成功')
@@ -99,9 +84,49 @@ Page({
             })
         })
     },
-    // 高考
-    
-    img_err(msg) {
-        console.log(msg.detail); // 获取第几张错误。
+    img_err() {
+        console.log(111111);
+        
+    },
+    /**
+     * 生命周期函数--监听页面显示
+     */
+    onShow: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面隐藏
+     */
+    onHide: function () {
+
+    },
+
+    /**
+     * 生命周期函数--监听页面卸载
+     */
+    onUnload: function () {
+
+    },
+
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function () {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function () {
+
     }
 })

@@ -1,0 +1,14 @@
+<!--pages/demo/index.wxml-->
+
+<view>
+    <!-- <view class="tab">
+        <view class="tab-list {{index == active?'actions':''}}" wx:for="{{tab}}" bindtap="tabBtn" data-id="{{index}}">{{item.name}}</view>
+    </view> -->
+    <!-- 画九宫格 -->
+    <view class="grid-wrap">
+        <navigator url="../spring/index" class="lists">
+            <view>春天</view>
+        </navigator>
+    </view>
+</view>
+
