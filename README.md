@@ -76,7 +76,7 @@ Page({
 
 ### 更多详细
 
-> [点击我](https://www.kancloud.cn/lolku_laocheng/wx_poster/1688453)
+> [点击我](https://www.kancloud.cn/my_love1/wx_poster/1688453)
 
 ## 问答
 
