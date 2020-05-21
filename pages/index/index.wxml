@@ -7,13 +7,13 @@
     <!-- 画九宫格 -->
     <view style="padding-bottom: 22rpx">案例如下：</view>
     <view class="grid-wrap">
-        <navigator url="../spring/index" class="lists">
+        <navigator url="/pages/spring/index" class="lists">
             <view>春天</view>
         </navigator>
-        <navigator url="../universityEntranceExam/index" class="lists">
+        <!-- <navigator url="../universityEntranceExam/index" class="lists">
             <view>高考</view>
-        </navigator>
-        <navigator url="../workersDay/index" class="lists">
+        </navigator> -->
+        <navigator url="/pages/workersDay/index" class="lists">
             <view>劳动节</view>
         </navigator>
     </view>

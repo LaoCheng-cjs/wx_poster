@@ -1,2 +1,7 @@
 <!--pages/workersDay/index.wxml-->
-<text>pages/workersDay/index.wxml</text>
+<view>
+     <!-- 合成得 -->
+    <image show-menu-by-longpress style="width: {{width}}rpx;height: {{height}}rpx" src="{{imgSrc}}"></image>
+    <wx_poster id="wx_poster" bind:img_err="img_err"  ></wx_poster>
+</view>
+

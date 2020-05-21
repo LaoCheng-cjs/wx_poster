@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "wx_poster": "/components/wx_poster/wx_poster"
+  },
+  "navigationBarTitleText": "劳动节"
 }
