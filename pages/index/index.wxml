@@ -8,13 +8,21 @@
     <view style="padding-bottom: 22rpx">案例如下：</view>
     <view class="grid-wrap">
         <navigator url="/pages/spring/index" class="lists">
-            <view>春天</view>
+            <image src="../../img/spring/9363245038570733abc99a929fca5c2e.jpg"></image>
+            <view class="msg">
+                <view class="title">春天</view>
+                <view class="describe">春天，又称春季，是四季中的第一个季节，指立春至立夏期间，含节气有立春、雨水、惊蛰、春分、清明、谷雨。</view>
+            </view>
         </navigator>
         <!-- <navigator url="../universityEntranceExam/index" class="lists">
             <view>高考</view>
         </navigator> -->
         <navigator url="/pages/workersDay/index" class="lists">
-            <view>劳动节</view>
+            <image src="../../img/workersDay/a8dfcfcad52388d1f34b195fc1067512.jpg"></image>
+           <view class="msg">
+                <view class="title">劳动节</view>
+                <view class="describe">国际劳动节又称“五一国际劳动节”、“国际示威游行日”（International Workers' Day或者May Day）。</view>
+            </view>
         </navigator>
     </view>
 </view>

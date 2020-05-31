@@ -21,23 +21,36 @@ view,image {
 
 /* 九宫格 */
 .grid-wrap {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-template-rows: auto auto auto;
-    height: 780rpx; 
-    grid-gap: 10px;
     margin: 0 22rpx;
 }
 .grid-wrap .lists {
+    width: 100%;
+    height: 160rpx;
     border: 1px solid #eee;
-   display: inline-flex;
+   display: flex;
    justify-items: center;
    align-items: center;
+   border-radius: 8rpx;
+   overflow: hidden;
+   margin-bottom: 22rpx;
 }
-.grid-wrap .lists view {
+.grid-wrap .lists image {
+    width: 240rpx;
+    height: 160rpx;
+}
+.grid-wrap .lists .msg {
+    width: 420rpx;
+    height: 160rpx;
+    padding-left: 32rpx;
+}
+.grid-wrap .lists .title {
     width: 100%;
-    font-size: 26rpx;
-    text-align: center;
+    font-size: 33rpx;
+    line-height: 33rpx;
+    padding: 16rpx 0;
+}
+.grid-wrap .lists .describe {
+    font-size: 22rpx;
 }
 
 .tips {
