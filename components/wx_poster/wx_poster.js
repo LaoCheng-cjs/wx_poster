@@ -381,6 +381,7 @@ function drawTxt(that) {
             ctx.font =  option.size + "px sans-serif"
             // ctx.fillText((nickname.length > 6 ? nickname.slice(0, 6) + '...' : nickname) + '邀你' + (app.storeData.userinfo.user_type == 2 ? '开团' : '参团'), 141 / ratio, 946 / ratio)
             ctx.fillStyle = option.color
+            ctx.setFontSize = option.fontSize;
             ctx.fillText(txtAll[i].txt , option.x , option.y)
         }
         drawCb()

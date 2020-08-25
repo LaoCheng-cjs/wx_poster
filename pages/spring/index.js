@@ -35,7 +35,7 @@ Page({
                 width: 750,
                 height: 1344
             })
-            wx_poster.addImg('../../img/spring/xiatian.png', {
+            wx_poster.addImg('/img/spring/xiatian.png', {
                 success(msg) {
                     console.log(msg)
                 }
@@ -50,7 +50,7 @@ Page({
             wx_poster.draw(function () {
                 // 单独绘制小程序码
                
-                wx_poster.wxCode('../../img/wx_img.png', {
+                wx_poster.wxCode('/img/spring/wx_img.png', {
                     y: 920,
                     x: 133,
                     width: 180,
